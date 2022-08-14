@@ -36,7 +36,12 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import com.raywenderlich.android.rwandroidtutorial.R
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+
 //import kotlin.coroutines.jvm.internal.CompletedContinuation.context
 
 
@@ -55,9 +60,25 @@ abstract class PlayersDatabase : RoomDatabase() {
           super.onCreate(db)
           INSTANCE?.let { database ->
               // TODO: dispatch some background process to load our data from Resources
+              //1
+              scope.launch{
+                  val playerDao = database.playerDao() // 2
+                  prePopulateDatabase(playerDao) // 3
+              }
           }
       }
       // TODO: Add prePopulateDatabase() here
+      private fun prePopulateDatabase(playerDao: PlayerDao){
+          // 1
+          val jsonString = resources.openRawResource(R.raw.players).bufferedReader().use {
+              it.readText()
+          }
+          // 2
+          val typeToken = object : TypeToken<List<Player>>() {}.type
+          val tennisPlayers = Gson().fromJson<List<Player>>(jsonString, typeToken)
+          // 3
+          playerDao.insertAllPlayers(tennisPlayers)
+      }
   }
   companion object {
 
@@ -77,7 +98,7 @@ abstract class PlayersDatabase : RoomDatabase() {
         val instance = Room.databaseBuilder(context.applicationContext,
             PlayersDatabase::class.java,
             "players_database")
-            .allowMainThreadQueries()
+            .addCallback(PlayerDatabaseCallback(coroutineScope, resources))
             .build()
         INSTANCE = instance
         return instance
