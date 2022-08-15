@@ -39,8 +39,11 @@ import androidx.room.Query
 interface PlayerDao {
 
   @Insert(onConflict = OnConflictStrategy.IGNORE)
-  fun insertAllPlayers(players: List<Player>)
+  suspend  fun insertAllPlayers(players: List<Player>)
 
   @Query("SELECT id, firstName, lastName, country, favorite, imageUrl FROM players")
-  fun getAllPlayers(): List<PlayerListItem>
+ suspend  fun getAllPlayers(): List<PlayerListItem>
 }
+//PlayerDao methods to getPlayerCount() and insertAllPlayers(players: List<Player>)
+// are still accessing the database on the main thread.
+//The old code in the MainActivity.kt file runs queries on the main thread.

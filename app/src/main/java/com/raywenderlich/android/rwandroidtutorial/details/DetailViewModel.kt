@@ -32,6 +32,7 @@ package com.raywenderlich.android.rwandroidtutorial.details
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
 import com.raywenderlich.android.rwandroidtutorial.PlayerRepository
 import com.raywenderlich.android.rwandroidtutorial.database.PlayersDatabase
 
@@ -40,8 +41,9 @@ class DetailViewModel(application: Application) : AndroidViewModel(application) 
   private val repository: PlayerRepository
 
   init {
-    val playerDao = PlayersDatabase
-        .getDatabase(application)
+
+      val playerDao = PlayersDatabase
+        .getDatabase(application,viewModelScope,application.resources)
         .playerDao()
     repository = PlayerRepository(playerDao)
   }

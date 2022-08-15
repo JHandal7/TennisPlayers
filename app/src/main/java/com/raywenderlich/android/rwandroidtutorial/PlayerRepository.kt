@@ -36,11 +36,11 @@ import com.raywenderlich.android.rwandroidtutorial.database.PlayerListItem
 
 class PlayerRepository(private val playerDao: PlayerDao) {
 
-  fun getAllPlayers(): List<PlayerListItem> {
+ suspend  fun getAllPlayers(): List<PlayerListItem> {
     return playerDao.getAllPlayers()
   }
 
-  fun insertAllPlayers(players: List<Player>) {
+  /*suspend fun insertAllPlayers(players: List<Player>) {
     playerDao.insertAllPlayers(players)
-  }
+  }*/
 }

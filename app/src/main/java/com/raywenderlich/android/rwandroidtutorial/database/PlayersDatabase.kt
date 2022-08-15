@@ -60,15 +60,16 @@ abstract class PlayersDatabase : RoomDatabase() {
           super.onCreate(db)
           INSTANCE?.let { database ->
               // TODO: dispatch some background process to load our data from Resources
-              //1
+              //1   Calling the launch coroutine builder on the CoroutineScope
+              // passed to PlayerDatabaseCallback named as scope
               scope.launch{
-                  val playerDao = database.playerDao() // 2
+               val  playerDao = database.playerDao() // 2
                   prePopulateDatabase(playerDao) // 3
               }
           }
       }
       // TODO: Add prePopulateDatabase() here
-      private fun prePopulateDatabase(playerDao: PlayerDao){
+      private suspend fun prePopulateDatabase(playerDao: PlayerDao){
           // 1         Reading the players.json raw resource file into a String.
           val jsonString = resources.openRawResource(R.raw.players).bufferedReader().use {
               it.readText()

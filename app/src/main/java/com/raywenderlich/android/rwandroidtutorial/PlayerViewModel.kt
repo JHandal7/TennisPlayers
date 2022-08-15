@@ -32,11 +32,13 @@ package com.raywenderlich.android.rwandroidtutorial
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.raywenderlich.android.rwandroidtutorial.database.Player
 import com.raywenderlich.android.rwandroidtutorial.database.PlayerListItem
 import com.raywenderlich.android.rwandroidtutorial.database.PlayersDatabase
+import kotlinx.coroutines.CoroutineScope
 
 open class PlayerViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -44,12 +46,12 @@ open class PlayerViewModel(application: Application) : AndroidViewModel(applicat
 
   init {
     val playerDao = PlayersDatabase
-        .getDatabase(application)
+        .getDatabase(application,viewModelScope,application.resources)
         .playerDao()
     repository = PlayerRepository(playerDao)
   }
-
-  fun populateDatabase() {
+/*
+  suspend fun populateDatabase() {
     val resources = getApplication<Application>().resources
     val jsonString = resources.openRawResource(R.raw.players).bufferedReader().use {
       it.readText()
@@ -57,9 +59,9 @@ open class PlayerViewModel(application: Application) : AndroidViewModel(applicat
     val typeToken = object : TypeToken<List<Player>>() {}.type
     val tennisPlayers = Gson().fromJson<List<Player>>(jsonString, typeToken)
     repository.insertAllPlayers(tennisPlayers)
-  }
+  }*/
 
-  fun getAllPlayers(): List<PlayerListItem> {
+  suspend fun getAllPlayers(): List<PlayerListItem> {
     return repository.getAllPlayers()
   }
 }

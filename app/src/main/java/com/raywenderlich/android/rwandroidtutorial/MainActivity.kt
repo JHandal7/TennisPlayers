@@ -69,8 +69,8 @@ class MainActivity : AppCompatActivity() {
     playerViewModel = ViewModelProvider(this).get(PlayerViewModel::class.java)
 
     //TODO replace below lines with viewmodel observation
-    playerViewModel.populateDatabase()
-    val players = playerViewModel.getAllPlayers()
-    adapter.swapData(players)
+   // playerViewModel.populateDatabase()
+    //val players = playerViewModel.getAllPlayers()
+  //  adapter.swapData(players)
   }
 }
