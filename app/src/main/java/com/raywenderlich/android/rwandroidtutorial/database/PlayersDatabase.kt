@@ -69,19 +69,24 @@ abstract class PlayersDatabase : RoomDatabase() {
       }
       // TODO: Add prePopulateDatabase() here
       private fun prePopulateDatabase(playerDao: PlayerDao){
-          // 1
+          // 1         Reading the players.json raw resource file into a String.
           val jsonString = resources.openRawResource(R.raw.players).bufferedReader().use {
               it.readText()
           }
-          // 2
+          // 2   Converting it to a List using Gson.
           val typeToken = object : TypeToken<List<Player>>() {}.type
           val tennisPlayers = Gson().fromJson<List<Player>>(jsonString, typeToken)
-          // 3
+          // 3     Inserting it into the Room database using the playerDao.
           playerDao.insertAllPlayers(tennisPlayers)
+
+         
+
       }
   }
   companion object {
-
+//getDatabase() in the Companion Object eventually needs
+// to set an instance of your callback in the builder. To do that,
+// you will need to modify the signature to pass in CoroutineScope and Resources as arguments.
     @Volatile
     private var INSTANCE: PlayersDatabase? = null
 
