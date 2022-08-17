@@ -32,8 +32,11 @@ package com.raywenderlich.android.rwandroidtutorial.details
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import com.raywenderlich.android.rwandroidtutorial.PlayerRepository
+import com.raywenderlich.android.rwandroidtutorial.database.Player
+import com.raywenderlich.android.rwandroidtutorial.database.PlayerListItem
 import com.raywenderlich.android.rwandroidtutorial.database.PlayersDatabase
 
 class DetailViewModel(application: Application) : AndroidViewModel(application) {
@@ -46,5 +49,9 @@ class DetailViewModel(application: Application) : AndroidViewModel(application) 
         .getDatabase(application,viewModelScope,application.resources)
         .playerDao()
     repository = PlayerRepository(playerDao)
+
+    }
+  fun getPlayer(player: PlayerListItem): LiveData<Player> {
+    return repository.getPlayer(player.id)
   }
 }

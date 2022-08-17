@@ -32,10 +32,12 @@ package com.raywenderlich.android.rwandroidtutorial
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.raywenderlich.android.rwandroidtutorial.database.PlayerListItem
 import com.raywenderlich.android.rwandroidtutorial.details.DetailsFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -70,7 +72,10 @@ class MainActivity : AppCompatActivity() {
 
     //TODO replace below lines with viewmodel observation
    // playerViewModel.populateDatabase()
-    //val players = playerViewModel.getAllPlayers()
+  //  val players = playerViewModel.getAllPlayers()
   //  adapter.swapData(players)
+    playerViewModel.getAllPlayers().observe(this, Observer<List<PlayerListItem>> { players ->
+      adapter.swapData(players)
+    })
   }
 }

@@ -32,6 +32,7 @@ package com.raywenderlich.android.rwandroidtutorial
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -61,7 +62,8 @@ open class PlayerViewModel(application: Application) : AndroidViewModel(applicat
     repository.insertAllPlayers(tennisPlayers)
   }*/
 
-  suspend fun getAllPlayers(): List<PlayerListItem> {
-    return repository.getAllPlayers()
-  }
+
+    fun getAllPlayers(): LiveData<List<PlayerListItem>> {
+        return repository.getAllPlayers()
+    }
 }

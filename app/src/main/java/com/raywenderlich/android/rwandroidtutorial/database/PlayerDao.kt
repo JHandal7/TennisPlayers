@@ -30,6 +30,7 @@
 
 package com.raywenderlich.android.rwandroidtutorial.database
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -42,7 +43,16 @@ interface PlayerDao {
   suspend  fun insertAllPlayers(players: List<Player>)
 
   @Query("SELECT id, firstName, lastName, country, favorite, imageUrl FROM players")
- suspend  fun getAllPlayers(): List<PlayerListItem>
+  fun getAllPlayers(): LiveData<List<PlayerListItem>>
+
+//Here, you’re adding the ability to read a player from the database using LiveData.
+
+  @Query("SELECT * FROM players WHERE id = :id")
+  fun getPlayer(id: Int): LiveData<Player>
+
+  //Next, you’ll update PlayerRepository with a similar method that calls into the DAO.
+
+
 }
 //PlayerDao methods to getPlayerCount() and insertAllPlayers(players: List<Player>)
 // are still accessing the database on the main thread.

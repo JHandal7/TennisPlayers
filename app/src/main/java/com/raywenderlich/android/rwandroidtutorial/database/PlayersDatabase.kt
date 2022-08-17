@@ -30,6 +30,7 @@
 
 package com.raywenderlich.android.rwandroidtutorial.database
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Resources
 import androidx.room.Database
@@ -56,6 +57,7 @@ abstract class PlayersDatabase : RoomDatabase() {
       private val resources: Resources
   ) : RoomDatabase.Callback() {
 
+      @SuppressLint("SuspiciousIndentation")
       override fun onCreate(db: SupportSQLiteDatabase) {
           super.onCreate(db)
           INSTANCE?.let { database ->
@@ -63,8 +65,8 @@ abstract class PlayersDatabase : RoomDatabase() {
               //1   Calling the launch coroutine builder on the CoroutineScope
               // passed to PlayerDatabaseCallback named as scope
               scope.launch{
-               val  playerDao = database.playerDao() // 2
-                  prePopulateDatabase(playerDao) // 3
+               val  playerDao = database.playerDao() // Accessing the playerDao.
+                  prePopulateDatabase(playerDao) // Calling the prePopulateDatabase(playerDoa) function
               }
           }
       }

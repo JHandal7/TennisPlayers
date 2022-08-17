@@ -30,17 +30,37 @@
 
 package com.raywenderlich.android.rwandroidtutorial
 
+import androidx.lifecycle.LiveData
 import com.raywenderlich.android.rwandroidtutorial.database.Player
 import com.raywenderlich.android.rwandroidtutorial.database.PlayerDao
 import com.raywenderlich.android.rwandroidtutorial.database.PlayerListItem
 
 class PlayerRepository(private val playerDao: PlayerDao) {
 
- suspend  fun getAllPlayers(): List<PlayerListItem> {
+ /*suspend  fun getAllPlayers(): List<PlayerListItem> {
     return playerDao.getAllPlayers()
-  }
-
-  /*suspend fun insertAllPlayers(players: List<Player>) {
-    playerDao.insertAllPlayers(players)
   }*/
+
+
+
+    fun getAllPlayers(): LiveData<List<PlayerListItem>> {
+        return playerDao.getAllPlayers()
+    }
+
+
+ // suspend fun insertAllPlayers(players: List<Player>) {
+  //  pla*/yerDao.insertAllPlayers(players)
+ // }
+
+    fun getPlayer(id: Int): LiveData<Player> {
+        return playerDao.getPlayer(id)
+    }
+    //PlayerDao.kt
+    // @Query("SELECT * FROM players WHERE id = :id")
+    //  fun getPlayer(id: Int): LiveData<Player>
+
 }
+//Since insertAllPlayers() function is deleted,
+// so any place in code where it is referenced will not be resolved anymore.
+// This will cause compilation errors. You will need to get rid of that.
+//Open the PlayerViewModel.kt file. Highlight and delete populateDatabase().

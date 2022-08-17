@@ -38,6 +38,7 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.raywenderlich.android.rwandroidtutorial.R
 import com.raywenderlich.android.rwandroidtutorial.database.Player
@@ -111,6 +112,15 @@ class DetailsFragment : DialogFragment(), Toolbar.OnMenuItemClickListener {
     arguments?.getParcelable<PlayerListItem>(PLAYER_KEY)?.let { playerListItem = it }
 
     //TODO observe viewmodel changes
+    // 1 Adding an observer to the getPlayer(playerListItem).
+    detailViewModel.getPlayer(playerListItem).observe(viewLifecycleOwner, Observer {
+      // 2 Updating the local Player with the observer player item it.
+      this.player = it
+
+      // 3 Calling to display the player now that the observer’s data is up to date.
+
+      displayPlayer()
+    })
   }
 
   private fun displayPlayer() {
