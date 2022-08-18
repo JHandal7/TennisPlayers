@@ -38,6 +38,7 @@ import com.raywenderlich.android.rwandroidtutorial.PlayerRepository
 import com.raywenderlich.android.rwandroidtutorial.database.Player
 import com.raywenderlich.android.rwandroidtutorial.database.PlayerListItem
 import com.raywenderlich.android.rwandroidtutorial.database.PlayersDatabase
+import kotlinx.coroutines.launch
 
 class DetailViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -54,4 +55,16 @@ class DetailViewModel(application: Application) : AndroidViewModel(application) 
   fun getPlayer(player: PlayerListItem): LiveData<Player> {
     return repository.getPlayer(player.id)
   }
+  // 1   viewModelScope to call launch, a coroutine builder method
+  fun updatePlayer(player: Player) = viewModelScope.launch {
+    // 2   This, in turn, calls updatePlayer(player: Player) within a coroutine.
+    repository.updatePlayer(player)
+  }
+
+  // 1
+  fun deletePlayer(player: Player) = viewModelScope.launch {
+    // 2  You use viewModelScope to call launch and run the operation in a coroutine.
+    repository.deletePlayer(player)
+  }
+
 }

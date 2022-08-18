@@ -31,10 +31,7 @@
 package com.raywenderlich.android.rwandroidtutorial.database
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 
 @Dao
 interface PlayerDao {
@@ -52,8 +49,13 @@ interface PlayerDao {
 
   //Next, you’ll update PlayerRepository with a similar method that calls into the DAO.
 
+  @Update
+  suspend fun updatePlayer(player: Player)
 
+  @Delete
+  suspend fun deletePlayer(player: Player)
 }
+
 //PlayerDao methods to getPlayerCount() and insertAllPlayers(players: List<Player>)
 // are still accessing the database on the main thread.
 //The old code in the MainActivity.kt file runs queries on the main thread.

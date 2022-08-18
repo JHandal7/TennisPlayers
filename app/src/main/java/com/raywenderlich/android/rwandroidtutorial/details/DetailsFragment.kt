@@ -66,7 +66,8 @@ class DetailsFragment : DialogFragment(), Toolbar.OnMenuItemClickListener {
       val args = Bundle().apply {
         putParcelable(PLAYER_KEY, player)
       }
-      fragment.arguments = args
+      fragment.arguments = args//Supply the construction arguments for this fragment.
+      // The arguments supplied here will be retained across fragment destroy and creation.
       return fragment
     }
   }
@@ -76,6 +77,8 @@ class DetailsFragment : DialogFragment(), Toolbar.OnMenuItemClickListener {
     setStyle(STYLE_NORMAL, R.style.AppTheme_Fragment)
     detailViewModel = ViewModelProvider(this).get(DetailViewModel::class.java)
   }
+  //Creates ViewModelProvider.
+  // This will create ViewModels and retain them in a store of the given ViewModelStoreOwner.
 
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
@@ -118,7 +121,13 @@ class DetailsFragment : DialogFragment(), Toolbar.OnMenuItemClickListener {
       this.player = it
 
       // 3 Calling to display the player now that the observer’s data is up to date.
+      detailViewModel.getPlayer(playerListItem).observe(this, Observer {
+        this.player = it
 
+        setupFavoriteToggle(checkbox, it) // called the method here
+
+        displayPlayer()
+      })
       displayPlayer()
     })
   }
@@ -145,10 +154,29 @@ class DetailsFragment : DialogFragment(), Toolbar.OnMenuItemClickListener {
   }
 
   private fun setupFavoriteToggle(checkBox: CheckBox, player : Player){
-    // TODO setup checkbox to toggle favorite status of player
+    // TODO setup checkbox to toggle favorite status of player Attaching
+    //  OnCheckedChangeListener to the checkbox star MenuItem.
+    // Assigning the player-favorite property to the checkbox checked value.
+    //Calling updatePlayer(player) from ViewModel.
+    //Handling the initial value of checkBox.isChecked.
+    // 1
+    checkBox.setOnCheckedChangeListener { _, b ->
+      // 2
+      player.favorite = b
+      // 3
+      detailViewModel.updatePlayer(player)
+    }
+// 4
+    checkBox.isChecked = player.favorite
   }
 
   private fun deleteCurrentPlayer(){
     // TODO delete the displayed player
+    detailViewModel.deletePlayer(player)
+    dismiss()
   }
 }
+//Dismiss the fragment and its dialog.
+// If the fragment was added to the back stack,
+// all back stack state up to and including this entry will be popped.
+// Otherwise, a new transaction will be committed to remove the fragment.
